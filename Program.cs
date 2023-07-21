@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Tienda;
 using Tienda.DBContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SistemaVentasContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionMaestra"));
 });
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

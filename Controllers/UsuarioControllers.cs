@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using AutoMapper;
+using Azure;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,142 +14,119 @@ namespace Tienda.Controllers{
 
         private readonly ILogger<UsuarioControllers> _logger;
         private readonly SistemaVentasContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public UsuarioControllers(ILogger<UsuarioControllers> logger, SistemaVentasContext dbContext) { 
+        public UsuarioControllers(ILogger<UsuarioControllers> logger, SistemaVentasContext dbContext, IMapper maper) { 
             _logger = logger;
             _dbContext = dbContext;
+            _mapper = maper;
         }
 
         [Route("UsuariosFull")]
         [HttpGet]
         [ProducesResponseType(200)]
-        public ActionResult<IEnumerable<Usuario>> GetUsuariosFull() {
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuariosFull() {
             _logger.LogInformation("Todas las villas se estan opteniendo");
-            return Ok(_dbContext.Usuarios.ToList());
+
+            IEnumerable<Usuario> usuario = await _dbContext.Usuarios.ToListAsync();
+
+            return Ok(_mapper.Map<IEnumerable<Usuario>>(usuario));
         }
 
         [Route("Usuarios")]
         [HttpGet]
         [ProducesResponseType(200)]
-        public ActionResult<IEnumerable<UsuarioDTO>> GetUsuarios(){
+        public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuarios(){
 
-            var usuarios = _dbContext.Usuarios.ToList();
+            var usuarios = await _dbContext.Usuarios.ToListAsync();
 
-            var usuariosDTO = usuarios.Select(usuario => new UsuarioDTO
-            {
-                UsuarioId = usuario.UsuarioId,
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                Contrasena = usuario.Contrasena
-            }).ToList();
-
-            return Ok(usuariosDTO);
+            return Ok(_mapper.Map<IEnumerable<UsuarioDTO>>(usuarios));
         }
 
-        [HttpGet("UsuarioFullID/{Id:int}", Name = "GetUsuario")]
+        [HttpGet("UsuarioFullID/{Id:int}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public ActionResult<Usuario> GetUsuarioFullID(int Id) { 
+        public async Task<ActionResult<Usuario>> GetUsuarioFullID(int Id) { 
             if(Id == 0) {
                 _logger.LogError($"Error al traer la villa con Id {Id}");
                 return BadRequest();
             }
 
-            var usuario = _dbContext.Usuarios.FirstOrDefault(v => v.UsuarioId == Id);
+            var usuario = await _dbContext.Usuarios.FirstOrDefaultAsync(v => v.UsuarioId == Id);
 
             if(usuario == null) { 
                 return NotFound();
             }
 
-            return Ok(usuario);
+            return Ok(_mapper.Map<Usuario>(usuario));
         }
 
-        [HttpGet("UsuarioId/{Id:int}")]
+        [HttpGet("UsuarioId/{Id:int}", Name = "GetUsuario")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public ActionResult<UsuarioDTO> GetUsuarioID(int Id) { 
+        public async Task<ActionResult<UsuarioDTO>> GetUsuarioID(int Id) { 
             if(Id == 0) {
                 return BadRequest();
             }
 
-            var usuario = _dbContext.Usuarios.ToList();
-
-            var usuarioDTO = usuario.Select(usuarios => new UsuarioDTO {
-                UsuarioId = usuarios.UsuarioId,
-                Nombre = usuarios.Nombre,
-                Apellido = usuarios.Apellido,
-                Contrasena = usuarios.Contrasena
-            }).ToList();
-
-            var usuarioID = usuarioDTO.FirstOrDefault(v => v.UsuarioId == Id);
+            var usuarioID = await _dbContext.Usuarios.FirstOrDefaultAsync(v => v.UsuarioId == Id);
 
             if (usuarioID == null) { 
                 return NotFound();
             }
 
-            return Ok(usuarioID);
+            return Ok(_mapper.Map<UsuarioDTO>(usuarioID));
         }
 
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public ActionResult<UsuarioDTO> CrearUsuario([FromBody] UsuarioDTO usuario) {
+        public async Task<ActionResult<UsuarioDTO>> CrearUsuario([FromBody] CrearUsuarioDTO usuario){
 
             //validar mi ModelState
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
 
             //Validaciones Personalizadas
-            if (_dbContext.Usuarios.FirstOrDefault(v => v.Nombre.ToLower() == usuario.Nombre.ToLower()) != null) {
-                ModelState.AddModelError("NombreExistente","El nombre que ingreso ya existe");
+            if (await _dbContext.Usuarios.FirstOrDefaultAsync(v => v.Nombre.ToLower() == usuario.Nombre.ToLower()) != null){
+                ModelState.AddModelError("NombreExistente", "El nombre que ingreso ya existe");
                 return BadRequest(ModelState);
             }
-            
-            if (usuario == null) {
+
+            if (usuario == null){
                 return BadRequest(usuario);
             }
 
-            if (usuario.UsuarioId > 0) {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-            usuario.UsuarioId = _dbContext.Usuarios.OrderByDescending(v => v.UsuarioId).FirstOrDefault().UsuarioId + 1;
-            
-            //Creo mi modelo
-            Usuario modelo = new(){
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                Contrasena = usuario.Contrasena
-            };
+            Usuario modelo = _mapper.Map<Usuario>(usuario);
 
             //agrego mis datos
-            _dbContext.Usuarios.Add(modelo);
-            _dbContext.SaveChanges();
+            await _dbContext.Usuarios.AddAsync(modelo);
+            await _dbContext.SaveChangesAsync();
 
-            return CreatedAtRoute("GetUsuario", new {Id = usuario.UsuarioId}, usuario);
+            return CreatedAtRoute("GetUsuario", new { Id = modelo.UsuarioId }, _mapper.Map<UsuarioDTO>(modelo));
         }
 
         [HttpDelete("EliminarUsuario/{Id:int}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult EliminarUsuario(int Id) {
+        public async Task<IActionResult> EliminarUsuario(int Id) {
             if (Id == 0) { 
                 return BadRequest();
             }
 
-            var usuario = _dbContext.Usuarios.FirstOrDefault(v => v.UsuarioId == Id);
+            var usuario = await _dbContext.Usuarios.FirstOrDefaultAsync(v => v.UsuarioId == Id);
 
             if(usuario == null) {
                 return NotFound();
             }
 
             _dbContext.Usuarios.Remove(usuario);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
@@ -156,20 +134,19 @@ namespace Tienda.Controllers{
         [HttpPut("UpdateUsuario/{Id:int}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult UpdateUsuario(int Id, [FromBody] UsuarioDTO usuario) { 
+        public async Task<IActionResult> UpdateUsuario(int Id, [FromBody] ActualizarUsuarioDTO usuario) { 
             if(usuario == null || Id != usuario.UsuarioId) {
                 return BadRequest();
             }
 
-            Usuario modelo = new() { 
-                UsuarioId = usuario.UsuarioId,
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                Contrasena = usuario.Contrasena,
-            };
+            if (!ModelState.IsValid) { 
+                return BadRequest(ModelState);
+            }
+
+            Usuario modelo = _mapper.Map<Usuario>(usuario);
 
             _dbContext.Usuarios.Update(modelo);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
@@ -177,29 +154,20 @@ namespace Tienda.Controllers{
         [HttpPatch("PatchUsuario/{Id:int}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult PatchUsuario(int Id, JsonPatchDocument<UsuarioDTO> usuarioDTO)
+        public async Task<IActionResult> PatchUsuario(int Id, JsonPatchDocument<ActualizarUsuarioDTO> usuarioDTO)
         {
             if (usuarioDTO == null || Id == 0)
             {
                 return BadRequest();
             }
 
-            var usuarioId = _dbContext.Usuarios.AsNoTracking().FirstOrDefault(v => v.UsuarioId == Id);
+            var usuarioId = await _dbContext.Usuarios.AsNoTracking().FirstOrDefaultAsync(v => v.UsuarioId == Id);
 
             if (usuarioId == null) {
                 return BadRequest(ModelState);
             }
 
-            UsuarioDTO modelo = new(){
-                UsuarioId = usuarioId.UsuarioId,
-                Nombre = usuarioId.Nombre,
-                Apellido = usuarioId.Apellido,
-                Contrasena = usuarioId.Contrasena
-            };
-
-            if (usuarioId == null) {
-                return BadRequest();
-            }
+            ActualizarUsuarioDTO modelo = _mapper.Map<ActualizarUsuarioDTO>(usuarioId);
 
             usuarioDTO.ApplyTo(modelo, ModelState);
 
@@ -207,19 +175,10 @@ namespace Tienda.Controllers{
                 return BadRequest(ModelState);
             }
 
-            Usuario usuarioListo = new() {
-                UsuarioId = modelo.UsuarioId,
-                Nombre = modelo.Nombre,
-                Apellido = modelo.Apellido,
-                Contrasena = modelo.Contrasena
-            };
+            Usuario usuarioListo = _mapper.Map<Usuario>(modelo);
 
-            try { 
-                _dbContext.Usuarios.Update(usuarioListo);
-            }catch(Exception ex) {
-                return BadRequest();
-            }
-            _dbContext.SaveChanges();
+            _dbContext.Usuarios.Update(usuarioListo);
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }

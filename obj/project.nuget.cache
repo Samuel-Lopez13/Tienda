@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "uelIwP/kkT0/vviLLnBkmyQzreT190fM9JZpVqEOXXuuB9yxULn2vNAwXvWpR8SNvK2fcqaN6OXn/a6hqqlTPg==",
+  "dgSpecHash": "WgCOB8Yu56e8cwoMSU7jsTSmY1LJEYxupUoNVi+46ouKpZWp2WlGpzQZWHUqUIN8H6qob6uMwmg87p0G2jMQ7g==",
   "success": true,
   "projectFilePath": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Material del Curso\\Proyectos\\Tienda\\Tienda\\Tienda.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\lopez\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\lopez\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\lopez\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\lopez\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\lopez\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

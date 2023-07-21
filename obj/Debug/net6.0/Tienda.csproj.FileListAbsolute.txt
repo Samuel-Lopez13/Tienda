@@ -89,3 +89,5 @@ C:\Users\lopez\Documents\Programacion\Web API\Material del Curso\Proyectos\Tiend
 C:\Users\lopez\Documents\Programacion\Web API\Material del Curso\Proyectos\Tienda\Tienda\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\lopez\Documents\Programacion\Web API\Material del Curso\Proyectos\Tienda\Tienda\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\lopez\Documents\Programacion\Web API\Material del Curso\Proyectos\Tienda\Tienda\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+C:\Users\lopez\Documents\Programacion\Web API\Material del Curso\Proyectos\Tienda\Tienda\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\lopez\Documents\Programacion\Web API\Material del Curso\Proyectos\Tienda\Tienda\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
