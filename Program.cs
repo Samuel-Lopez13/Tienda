@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Tienda;
 using Tienda.DBContext;
+using Tienda.Repositorio;
+using Tienda.Repositorio.IRepositorio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,9 @@ builder.Services.AddDbContext<SistemaVentasContext>(options => {
 });
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+//Agregar implementacion para las interfaces
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

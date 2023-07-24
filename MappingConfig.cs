@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Tienda.Modelo;
 using Tienda.Modelo.DTO;
 
 namespace Tienda
