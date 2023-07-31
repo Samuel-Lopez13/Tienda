@@ -7,6 +7,7 @@ public partial class Usuario{
     
         [Required]
         [MaxLength(30)]
+        //Fluent api
         public string? Nombre { get; set; }
 
         public string? Apellido { get; set; }

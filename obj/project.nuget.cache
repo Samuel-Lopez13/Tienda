@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WgCOB8Yu56e8cwoMSU7jsTSmY1LJEYxupUoNVi+46ouKpZWp2WlGpzQZWHUqUIN8H6qob6uMwmg87p0G2jMQ7g==",
+  "dgSpecHash": "E0ZcSz5BmnGPD8Lw0Ur3QwXMy4xOHdA6gdEnYemGuET4L/ijk71t0TSXvPS/3Rni1PqoqedFN4OLuktYQUmgmQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Material del Curso\\Proyectos\\Tienda\\Tienda\\Tienda.csproj",
+  "projectFilePath": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Codigo\\Proyectos\\Tienda\\Tienda\\Tienda.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lopez\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\lopez\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

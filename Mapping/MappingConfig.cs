@@ -2,15 +2,17 @@
 using Tienda.Modelo;
 using Tienda.Modelo.DTO;
 
-namespace Tienda
+namespace Tienda.Mapping
 {
-    public class MappingConfig : Profile{
+    public class MappingConfig : Profile
+    {
 
-        public MappingConfig(){
+        public MappingConfig()
+        {
             //Hacerlo uno por uno
-                     //Funte   //Destino
+            //Funte   //Destino
             CreateMap<Usuario, UsuarioDTO>();
-                     //Funte   //Destino
+            //Funte   //Destino
             CreateMap<UsuarioDTO, Usuario>();
 
             //Es lo mismo que esta arriba

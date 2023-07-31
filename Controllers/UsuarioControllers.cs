@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
-using Tienda.DBContext;
 using Tienda.Modelo;
 using Tienda.Modelo.DTO;
 using Tienda.Repositorio.IRepositorio;
@@ -30,14 +27,13 @@ namespace Tienda.Controllers{
         [Route("UsuariosFull")]
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<APIResponse>> GetUsuariosFull()
-        {
+        public async Task<ActionResult<APIResponse>> GetUsuariosFull(){
             try{
                 _logger.LogInformation("Todas las villas se estan opteniendo");
 
                 IEnumerable<Usuario> usuario = await _usuarioRepo.ObtenerTodos();
 
-                _response.Resultado = _mapper.Map<IEnumerable<Usuario>>(usuario);
+                _response.Resultado = usuario;
                 _response.statusCode = HttpStatusCode.OK;
 
                 return Ok(_response);
@@ -89,7 +85,7 @@ namespace Tienda.Controllers{
                     return NotFound(_response);
                 }
 
-                _response.Resultado = _mapper.Map<Usuario>(usuario);
+                _response.Resultado = usuario;
                 _response.statusCode = HttpStatusCode.OK;
 
                 return Ok(_response);
@@ -126,6 +122,36 @@ namespace Tienda.Controllers{
                 return Ok(_response);
             }
             catch (Exception ex) { 
+                _response.isExitoso = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
+
+            return _response;
+        }
+
+        [HttpGet("Validacion/{nombre}/{contrasena}")]
+        public async Task<ActionResult<APIResponse>> UsuarioValido(string nombre, string contrasena) {
+            try{
+                if(nombre == null || contrasena == null) { 
+                    _response.isExitoso = false;
+                    _response.statusCode = HttpStatusCode.BadRequest; 
+                    return _response;
+                }
+
+                var usuarioCorrecto = await _usuarioRepo.Obtener(v => v.Nombre == nombre && v.Contrasena == contrasena);
+
+                if (usuarioCorrecto == null) { 
+                    _response.isExitoso = false;
+                    _response.statusCode = HttpStatusCode.NotFound;
+                    return _response;
+                }
+
+                _response.Resultado = _mapper.Map<UsuarioDTO>(usuarioCorrecto);
+                _response.statusCode = HttpStatusCode.OK;
+
+                return _response;
+            }
+            catch (Exception ex){
                 _response.isExitoso = false;
                 _response.ErrorMessages = new List<string> { ex.ToString() };
             }

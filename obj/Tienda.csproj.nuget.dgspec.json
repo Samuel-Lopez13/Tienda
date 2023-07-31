@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Material del Curso\\Proyectos\\Tienda\\Tienda\\Tienda.csproj": {}
+    "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Codigo\\Proyectos\\Tienda\\Tienda\\Tienda.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Material del Curso\\Proyectos\\Tienda\\Tienda\\Tienda.csproj": {
+    "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Codigo\\Proyectos\\Tienda\\Tienda\\Tienda.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Material del Curso\\Proyectos\\Tienda\\Tienda\\Tienda.csproj",
+        "projectUniqueName": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Codigo\\Proyectos\\Tienda\\Tienda\\Tienda.csproj",
         "projectName": "Tienda",
-        "projectPath": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Material del Curso\\Proyectos\\Tienda\\Tienda\\Tienda.csproj",
+        "projectPath": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Codigo\\Proyectos\\Tienda\\Tienda\\Tienda.csproj",
         "packagesPath": "C:\\Users\\lopez\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Material del Curso\\Proyectos\\Tienda\\Tienda\\obj\\",
+        "outputPath": "C:\\Users\\lopez\\Documents\\Programacion\\Web API\\Codigo\\Proyectos\\Tienda\\Tienda\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\lopez\\AppData\\Roaming\\NuGet\\NuGet.Config",

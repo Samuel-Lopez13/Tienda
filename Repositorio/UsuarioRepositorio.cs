@@ -1,6 +1,7 @@
 ﻿using Tienda.Repositorio.IRepositorio;
 using Tienda.Modelo;
 using Tienda.DBContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tienda.Repositorio
 {
